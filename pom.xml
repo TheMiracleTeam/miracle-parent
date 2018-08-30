@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 基本信息 -->
+    <description>miracle</description>
+    <name>miracle-parent</name>
+    <packaging>pom</packaging>
+
+    <!-- 聚合工程的父工程 -->
+    <groupId>com.miracle</groupId>
+    <artifactId>miracle-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- 继承Spring Boot提供的父工程 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <!-- 子模块 -->
+    <modules>
+        <module>miracle-api</module>
+        <module>miracle-common</module>
+        <module>miracle-repository</module>
+        <module>miracle-zookeeper</module>
+        <module>miracle-mybatis</module>
+        <module>miracle-dubbo</module>
+        <module>miracle-platform</module>
+    </modules>
+
+    <!-- 公共属性 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <mysql.version>8.0.12</mysql.version>
+        <mybatis.spring.version>1.3.2</mybatis.spring.version>
+        <druid.version>1.1.10</druid.version>
+        <dubbo.version>2.6.2</dubbo.version>
+        <dubbo-spring-boot>1.0.0</dubbo-spring-boot>
+        <zkclient.version>0.10</zkclient.version>
+        <zookeeper.version>3.4.9</zookeeper.version>
+        <fastjson.version>1.2.49</fastjson.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.0.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
