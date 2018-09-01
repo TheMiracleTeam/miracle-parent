@@ -16,6 +16,4 @@ import java.lang.annotation.*;
 public @interface ZookeeperWatch {
 
     String path();
-
-    boolean isDir() default false;
 }

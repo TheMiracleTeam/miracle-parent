@@ -2,6 +2,7 @@ package com.miracle.platform.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.miracle.common.util.ZookeeperUtil;
+import com.miracle.platform.config.PageSetupCnf;
 import com.miracle.platform.service.ConfigService;
 import com.miracle.repository.model.HelloWorld;
 import com.miracle.repository.service.IHelloWorldService;
@@ -29,6 +30,15 @@ public class ConfigController {
 
     @Autowired
     private ConfigService configService;
+
+    @RequestMapping(value = "getPageConfig", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getPageConfig() {
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("data", PageSetupCnf.getJson());
+        ret.put("set", PageSetupCnf.getNavigationList());
+        return ret;
+    }
 
     @RequestMapping(value = "getAllData", method = RequestMethod.GET)
     @ResponseBody
