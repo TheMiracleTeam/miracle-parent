@@ -40,9 +40,15 @@ public class ConfigService {
         params.put("type", Constant.CNF_TYPE_SYSTEM + "," + Constant.CNF_TYPE_PLATFORM);
         params.put("enable", Constant.STATUS_ENABLE);
         List<CnfConfig> list = cnfConfigService.listAll(params);
+        String path;
         for (CnfConfig cnfConfig : list) {
             ZkClient zkClient = ZookeeperUtil.getZkClient(zkHost, zkTimeout);
-            zkClient.createPersistent(ConfigKey.CNF_ROOT + cnfConfig.getConfKey(), cnfConfig.getConfValue());
+            path = ConfigKey.CNF_ROOT + cnfConfig.getConfKey();
+            if (zkClient.exists(path)) {
+                zkClient.writeData(path, cnfConfig.getConfValue());
+            } else {
+                zkClient.createPersistent(path, cnfConfig.getConfValue());
+            }
         }
     }
 }
