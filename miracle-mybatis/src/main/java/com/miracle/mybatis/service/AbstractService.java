@@ -2,6 +2,8 @@ package com.miracle.mybatis.service;
 
 import com.miracle.common.util.StringUtil;
 import com.miracle.mybatis.dao.DaoSupport;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -295,5 +297,17 @@ public abstract class AbstractService<T> extends DaoSupport {
             return this.countAll();
         }
         return super.selectForObject(DEFAULT_COUNT_SQL_ID, params);
+    }
+
+    /**
+     * 根据SqlId获取SQL语句
+     * @param sqlId SqlId
+     * @param params 参数
+     * @return String SQL语句
+     */
+    public String getSQLById(String sqlId, Object params) {
+        Configuration configuration = this.getSqlSessionFactory().getConfiguration();
+        BoundSql boundSql = configuration.getMappedStatement(NAMESPACE + sqlId).getBoundSql(params);
+        return boundSql.getSql();
     }
 }

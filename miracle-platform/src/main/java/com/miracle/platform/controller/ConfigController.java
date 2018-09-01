@@ -2,9 +2,11 @@ package com.miracle.platform.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.miracle.common.util.ZookeeperUtil;
+import com.miracle.platform.service.ConfigService;
 import com.miracle.repository.model.HelloWorld;
 import com.miracle.repository.service.IHelloWorldService;
 import org.I0Itec.zkclient.ZkClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,9 @@ public class ConfigController {
 
     @Reference
     private IHelloWorldService helloWorldService;
+
+    @Autowired
+    private ConfigService configService;
 
     @RequestMapping(value = "getAllData", method = RequestMethod.GET)
     @ResponseBody

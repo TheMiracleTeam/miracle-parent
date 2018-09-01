@@ -23,7 +23,7 @@ public class ZookeeperService {
     @PostConstruct
     public void init() {
         System.out.println("do this init ZookeeperService");
-        for (AnnotationData annotationData : AnnotationUtil.getMethodsByAnnotation(ZookeeperWatch.class)) {
+        for (AnnotationData annotationData : AnnotationUtil.getAnnotationDataByAnnotationClass(ZookeeperWatch.class)) {
             System.out.println("in for");
             ZookeeperWatch annotation = AnnotationUtil.getAnnotation(annotationData.getMethod(), ZookeeperWatch.class);
             System.out.println(annotation.path());

@@ -30,15 +30,7 @@
         <javaClientGenerator targetPackage="${mybatis.dao.target-package}" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <!--<table tableName="user"-->
-               <!--enableCountByExample="false" enableUpdateByExample="false"-->
-               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
-               <!--selectByExampleQueryId="false">-->
-            <!--<property name="rootClass" value="com.miracle.repository.base.BaseModel"/>-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <table tableName="hello_world"
+        <table tableName="cnf_config"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

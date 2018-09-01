@@ -23,7 +23,7 @@
 hs_err_pid*
 
 /target/
-/miracle-platform/target
+/*/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

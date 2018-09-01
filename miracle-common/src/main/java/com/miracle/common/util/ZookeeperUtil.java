@@ -21,67 +21,71 @@ import java.util.List;
 @Component
 public class ZookeeperUtil {
 
+    // Zookeeper操作客户端
     private static ZkClient zkClient;
-
+    // Zookeeper服务器地址
     private static String HOST;
-
+    // Zookeeper超时时间
     private static int TIMEOUT;
 
-    private static String PATH;
-
-    public static ZkClient getZkClient() {
+    /**
+     * 获取Zookeeper操作客户端实例
+     * @param host Zookeeper地址
+     * @param timeout Zookeeper超时时间
+     * @return ZkClient Zookeeper操作客户端
+     */
+    public static ZkClient getZkClient(String host, int timeout) {
         System.out.println("初始化Zookeeper");
-        System.out.println(HOST);
-        System.out.println(TIMEOUT);
-        System.out.println(PATH);
+        System.out.println(host);
+        System.out.println(timeout);
         if (null == zkClient) { // 提高效率
             synchronized (ZookeeperUtil.class) {
                 if (null == zkClient) { // 线程安全
-                    zkClient = new ZkClient(HOST, TIMEOUT);
+                    zkClient = new ZkClient(host, timeout);
                     zkClient.setZkSerializer(new MyZkSerializer());
 
-                    zkClient.subscribeChildChanges(PATH, new IZkChildListener() {
-                        @Override
-                        public void handleChildChange(String parentPath, List<String> currentChild) throws Exception {
-                            System.out.println(parentPath + " `s child changed, currentChild：" + currentChild);
-                        }
-                    });
-
-                    zkClient.subscribeDataChanges(PATH, new IZkDataListener() {
-                        @Override
-                        public void handleDataChange(String dataPath, Object data) throws Exception {
-                            System.out.println("Node " + dataPath + " changed, new data " + data);
-                        }
-
-                        @Override
-                        public void handleDataDeleted(String dataPath) throws Exception {
-                            System.out.println("Node " + dataPath + " deleted.");
-                        }
-                    });
-
-                    zkClient.subscribeDataChanges(PATH + "2", new IZkDataListener() {
-                        @Override
-                        public void handleDataChange(String dataPath, Object data) throws Exception {
-                            System.out.println("Node " + dataPath + " changed, new data " + data);
-                        }
-
-                        @Override
-                        public void handleDataDeleted(String dataPath) throws Exception {
-                            System.out.println("Node " + dataPath + " deleted.");
-                        }
-                    });
-
-                    zkClient.subscribeDataChanges(PATH + "/cnf", new IZkDataListener() {
-                        @Override
-                        public void handleDataChange(String dataPath, Object data) throws Exception {
-                            System.out.println("Node " + dataPath + " changed, new data " + data);
-                        }
-
-                        @Override
-                        public void handleDataDeleted(String dataPath) throws Exception {
-                            System.out.println("Node " + dataPath + " deleted.");
-                        }
-                    });
+//                    zkClient.subscribeChildChanges(PATH, new IZkChildListener() {
+//                        @Override
+//                        public void handleChildChange(String parentPath, List<String> currentChild) throws Exception {
+//                            System.out.println(parentPath + " `s child changed, currentChild：" + currentChild);
+//                        }
+//                    });
+//
+//                    zkClient.subscribeDataChanges(PATH, new IZkDataListener() {
+//                        @Override
+//                        public void handleDataChange(String dataPath, Object data) throws Exception {
+//                            System.out.println("Node " + dataPath + " changed, new data " + data);
+//                        }
+//
+//                        @Override
+//                        public void handleDataDeleted(String dataPath) throws Exception {
+//                            System.out.println("Node " + dataPath + " deleted.");
+//                        }
+//                    });
+//
+//                    zkClient.subscribeDataChanges(PATH + "2", new IZkDataListener() {
+//                        @Override
+//                        public void handleDataChange(String dataPath, Object data) throws Exception {
+//                            System.out.println("Node " + dataPath + " changed, new data " + data);
+//                        }
+//
+//                        @Override
+//                        public void handleDataDeleted(String dataPath) throws Exception {
+//                            System.out.println("Node " + dataPath + " deleted.");
+//                        }
+//                    });
+//
+//                    zkClient.subscribeDataChanges(PATH + "/cnf", new IZkDataListener() {
+//                        @Override
+//                        public void handleDataChange(String dataPath, Object data) throws Exception {
+//                            System.out.println("Node " + dataPath + " changed, new data " + data);
+//                        }
+//
+//                        @Override
+//                        public void handleDataDeleted(String dataPath) throws Exception {
+//                            System.out.println("Node " + dataPath + " deleted.");
+//                        }
+//                    });
                 }
             }
 
@@ -90,20 +94,11 @@ public class ZookeeperUtil {
     }
 
     /**
-     * 自定义Zookeeper序列化器
+     * 获取Zookeeper操作客户端实例
+     * @return ZkClient= Zookeeper操作客户端
      */
-    static class MyZkSerializer implements ZkSerializer {
-        @Override
-        public byte[] serialize(Object obj) throws ZkMarshallingError {
-            System.out.println("do 序列化");
-            return String.valueOf(obj).getBytes(StandardCharsets.UTF_8);
-        }
-
-        @Override
-        public Object deserialize(byte[] bytes) throws ZkMarshallingError {
-            System.out.println("de 序列化");
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
+    public static ZkClient getZkClient() {
+        return getZkClient(HOST, TIMEOUT);
     }
 
     @Value("${zookeeper.host}")
@@ -116,8 +111,31 @@ public class ZookeeperUtil {
         TIMEOUT = timeout;
     }
 
-    @Value("${zookeeper.path}")
-    public void setPath(String path) {
-        PATH = path;
+    /**
+     * 自定义Zookeeper序列化器
+     */
+    static class MyZkSerializer implements ZkSerializer {
+
+        /**
+         * 序列化
+         * @param obj 数据
+         * @return byte[] 字节数组
+         * @throws ZkMarshallingError Zookeeper序列化异常
+         */
+        @Override
+        public byte[] serialize(Object obj) throws ZkMarshallingError {
+            return String.valueOf(obj).getBytes(StandardCharsets.UTF_8);
+        }
+
+        /**
+         * 反序列化
+         * @param bytes 字节数组
+         * @return Object 原数据
+         * @throws ZkMarshallingError Zookeeper序列化异常
+         */
+        @Override
+        public Object deserialize(byte[] bytes) throws ZkMarshallingError {
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
     }
 }

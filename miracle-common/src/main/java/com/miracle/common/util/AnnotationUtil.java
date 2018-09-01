@@ -19,7 +19,7 @@ public class AnnotationUtil extends AnnotationUtils {
      * @param annotationClass 注解类
      * @return List<AnnotationData> 自定义注解集
      */
-    public static <T extends Annotation> List<AnnotationData> getMethodsByAnnotation(Class<T> annotationClass) {
+    public static <T extends Annotation> List<AnnotationData> getAnnotationDataByAnnotationClass(Class<T> annotationClass) {
         return AnnotationContainer.getAnnotationByClazz(annotationClass);
     }
 }

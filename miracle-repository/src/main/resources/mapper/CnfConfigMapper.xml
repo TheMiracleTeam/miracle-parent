@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.miracle.repository.mapper.HelloWorldMapper">
-    <resultMap id="BaseResultMap" type="com.miracle.repository.model.HelloWorld">
+<mapper namespace="com.miracle.repository.mapper.CnfConfigMapper">
+    <resultMap id="BaseResultMap" type="com.miracle.repository.model.CnfConfig">
         <!--
           WARNING - @mbg.generated
         -->
         <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="world_name" jdbcType="VARCHAR" property="worldName"/>
-        <result column="number_of_people" jdbcType="INTEGER" property="numberOfPeople"/>
+        <result column="conf_key" jdbcType="VARCHAR" property="confKey"/>
+        <result column="conf_value" jdbcType="VARCHAR" property="confValue"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="enable" jdbcType="TINYINT" property="enable"/>
         <result column="created_at" jdbcType="INTEGER" property="createdAt"/>
         <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
         <result column="modified_at" jdbcType="INTEGER" property="modifiedAt"/>
@@ -15,7 +17,7 @@
     </resultMap>
 
     <sql id="BaseTableName">
-        hello_world
+        cnf_config
     </sql>
 
     <!-- 统计 -->
