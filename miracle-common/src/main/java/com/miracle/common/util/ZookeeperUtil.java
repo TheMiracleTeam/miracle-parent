@@ -1,16 +1,12 @@
 package com.miracle.common.util;
 
-import org.I0Itec.zkclient.IZkChildListener;
-import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkMarshallingError;
 import org.I0Itec.zkclient.serialize.ZkSerializer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 
 /**
@@ -35,60 +31,13 @@ public class ZookeeperUtil {
      * @return ZkClient Zookeeper操作客户端
      */
     public static ZkClient getZkClient(String host, int timeout) {
-        System.out.println("初始化Zookeeper");
-        System.out.println(host);
-        System.out.println(timeout);
         if (null == zkClient) { // 提高效率
             synchronized (ZookeeperUtil.class) {
                 if (null == zkClient) { // 线程安全
                     zkClient = new ZkClient(host, timeout);
                     zkClient.setZkSerializer(new MyZkSerializer());
-
-//                    zkClient.subscribeChildChanges(PATH, new IZkChildListener() {
-//                        @Override
-//                        public void handleChildChange(String parentPath, List<String> currentChild) throws Exception {
-//                            System.out.println(parentPath + " `s child changed, currentChild：" + currentChild);
-//                        }
-//                    });
-//
-//                    zkClient.subscribeDataChanges(PATH, new IZkDataListener() {
-//                        @Override
-//                        public void handleDataChange(String dataPath, Object data) throws Exception {
-//                            System.out.println("Node " + dataPath + " changed, new data " + data);
-//                        }
-//
-//                        @Override
-//                        public void handleDataDeleted(String dataPath) throws Exception {
-//                            System.out.println("Node " + dataPath + " deleted.");
-//                        }
-//                    });
-//
-//                    zkClient.subscribeDataChanges(PATH + "2", new IZkDataListener() {
-//                        @Override
-//                        public void handleDataChange(String dataPath, Object data) throws Exception {
-//                            System.out.println("Node " + dataPath + " changed, new data " + data);
-//                        }
-//
-//                        @Override
-//                        public void handleDataDeleted(String dataPath) throws Exception {
-//                            System.out.println("Node " + dataPath + " deleted.");
-//                        }
-//                    });
-//
-//                    zkClient.subscribeDataChanges(PATH + "/cnf", new IZkDataListener() {
-//                        @Override
-//                        public void handleDataChange(String dataPath, Object data) throws Exception {
-//                            System.out.println("Node " + dataPath + " changed, new data " + data);
-//                        }
-//
-//                        @Override
-//                        public void handleDataDeleted(String dataPath) throws Exception {
-//                            System.out.println("Node " + dataPath + " deleted.");
-//                        }
-//                    });
                 }
             }
-
         }
         return zkClient;
     }
