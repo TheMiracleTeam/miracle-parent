@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.miracle.api.mapper.common.CommonMapper">
+<mapper namespace="com.miracle.repository.mapper.common.CommonMapper">
 	<!-- Field SQL -->
 	<sql id="field_sql">
 		<choose>

@@ -25,19 +25,19 @@
         select count(id)
         from
         <include refid="BaseTableName"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.where_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
     </select>
 
     <!-- 查询 -->
     <select id="findAll" resultMap="BaseResultMap">
         select
-        <include refid="com.miracle.api.mapper.common.CommonMapper.field_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.field_sql"/>
         from
         <include refid="BaseTableName"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.where_sql"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.group_sql"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.order_sql"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.limit_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.group_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.order_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.limit_sql"/>
     </select>
 
     <!-- 删除 -->
@@ -45,6 +45,6 @@
         delete
         from
         <include refid="BaseTableName"/>
-        <include refid="com.miracle.api.mapper.common.CommonMapper.where_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
     </delete>
 </mapper>
