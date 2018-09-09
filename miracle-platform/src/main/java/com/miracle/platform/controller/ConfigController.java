@@ -43,10 +43,7 @@ public class ConfigController {
     @RequestMapping(value = "getAllData", method = RequestMethod.GET)
     @ResponseBody
     public List<HelloWorld> getAllData() {
-        System.out.println("地址为：");
-        System.out.println(HOST);
         ZkClient zkClient = ZookeeperUtil.getZkClient();
-
         return helloWorldService.listAll();
     }
 

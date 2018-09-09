@@ -1,6 +1,6 @@
 package com.miracle.repository.model;
 
-import com.miracle.repository.base.BaseModel;
+import com.miracle.common.base.BaseModel;
 import javax.persistence.*;
 
 @Table(name = "cnf_config")

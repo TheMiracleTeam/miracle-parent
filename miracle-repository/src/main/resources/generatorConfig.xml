@@ -13,7 +13,7 @@
         <property name="javaFileEncoding" value="utf-8"/>
         <!-- 集成通用Mapper -->
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.miracle.repository.base.BaseMapper"/>
+            <property name="mappers" value="com.miracle.mybatis.base.BaseMapper"/>
         </plugin>
         <!-- 生成注释 -->
         <commentGenerator>
@@ -34,7 +34,7 @@
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-            <property name="rootClass" value="com.miracle.repository.base.BaseModel"/>
+            <property name="rootClass" value="com.miracle.common.base.BaseModel"/>
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

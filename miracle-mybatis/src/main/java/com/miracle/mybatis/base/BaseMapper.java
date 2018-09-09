@@ -1,4 +1,4 @@
-package com.miracle.repository.base;
+package com.miracle.mybatis.base;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

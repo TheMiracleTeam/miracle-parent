@@ -1,4 +1,4 @@
-package com.miracle.repository.base;
+package com.miracle.common.base;
 
 import java.io.Serializable;
 
