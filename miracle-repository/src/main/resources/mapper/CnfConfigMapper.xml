@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.miracle.repository.mapper.CnfConfigMapper">
-    <resultMap id="BaseResultMap" type="com.miracle.repository.model.CnfConfig">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="conf_key" jdbcType="VARCHAR" property="confKey"/>
-        <result column="conf_value" jdbcType="VARCHAR" property="confValue"/>
-        <result column="type" jdbcType="TINYINT" property="type"/>
-        <result column="enable" jdbcType="TINYINT" property="enable"/>
-        <result column="created_at" jdbcType="INTEGER" property="createdAt"/>
-        <result column="created_by" jdbcType="INTEGER" property="createdBy"/>
-        <result column="modified_at" jdbcType="INTEGER" property="modifiedAt"/>
-        <result column="modified_by" jdbcType="INTEGER" property="modifiedBy"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.miracle.repository.model.CnfConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="conf_key" jdbcType="VARCHAR" property="confKey" />
+    <result column="conf_value" jdbcType="VARCHAR" property="confValue" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="enable" jdbcType="TINYINT" property="enable" />
+    <result column="created_at" jdbcType="INTEGER" property="createdAt" />
+    <result column="created_by" jdbcType="INTEGER" property="createdBy" />
+    <result column="modified_at" jdbcType="INTEGER" property="modifiedAt" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
 
     <sql id="BaseTableName">
         cnf_config
@@ -24,27 +25,27 @@
     <select id="countAll" resultType="int">
         select count(id)
         from
-        <include refid="BaseTableName"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
+        <include refid="BaseTableName" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql" />
     </select>
 
     <!-- 查询 -->
     <select id="findAll" resultMap="BaseResultMap">
         select
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.field_sql"/>
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.field_sql" />
         from
-        <include refid="BaseTableName"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.group_sql"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.order_sql"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.limit_sql"/>
+        <include refid="BaseTableName" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.group_sql" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.order_sql" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.limit_sql" />
     </select>
 
     <!-- 删除 -->
     <delete id="deleteAll">
         delete
         from
-        <include refid="BaseTableName"/>
-        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql"/>
+        <include refid="BaseTableName" />
+        <include refid="com.miracle.repository.mapper.common.CommonMapper.where_sql" />
     </delete>
 </mapper>

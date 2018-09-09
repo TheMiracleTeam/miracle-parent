@@ -8,6 +8,7 @@ public class CnfConfig extends BaseModel {
     /**
      * ID，自增主键
      */
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -56,6 +57,11 @@ public class CnfConfig extends BaseModel {
      */
     @Column(name = "modified_by")
     private Integer modifiedBy;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 获取ID，自增主键
@@ -217,5 +223,23 @@ public class CnfConfig extends BaseModel {
      */
     public void setModifiedBy(Integer modifiedBy) {
         this.modifiedBy = modifiedBy;
+    }
+
+    /**
+     * 获取备注
+     *
+     * @return remark - 备注
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * 设置备注
+     *
+     * @param remark 备注
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

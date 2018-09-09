@@ -10,6 +10,12 @@
 
     <name>miracle-api</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
     <parent>
         <groupId>com.miracle</groupId>
         <artifactId>miracle-parent</artifactId>
