@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 查询参数
+ * 查询参数封装类
  * Created at 2018-08-21 21:58:20
  * @author Allen
  */

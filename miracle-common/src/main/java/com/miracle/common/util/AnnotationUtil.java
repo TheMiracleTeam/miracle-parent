@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
- * 注解操作工具类
+ * 注解工具类
  * Created at 2018-08-25 14:37:24
  * @author Allen
  */

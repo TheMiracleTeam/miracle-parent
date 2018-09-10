@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * 自定义注解实体类
+ * 自定义注解封装类
  * Created at 2018-08-22 23:28:18
  * @author Allen
  */

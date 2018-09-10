@@ -8,9 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
-
 /**
- * Zookeeper操作工具类
+ * Zookeeper工具类
  * Created at 2018-08-25 16:45:28
  * @author Allen
  */

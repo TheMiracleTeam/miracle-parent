@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 
 /**
- * 对象属性操作工具类
+ * 对象属性工具类
  * Created at 2018-09-02 00:06:34
  * @author Allen
  */

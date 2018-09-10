@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 字符串操作工具类
+ * 字符串工具类
  * Created at 2018-08-16 22:23:46
  * @author Allen
  */

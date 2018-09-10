@@ -16,7 +16,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * Class操作工具类
+ * Class工具类
  * Created at 2018-08-25 10:51:32
  * @author Allen
  */
