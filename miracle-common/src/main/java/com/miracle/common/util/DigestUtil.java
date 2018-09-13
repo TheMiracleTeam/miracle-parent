@@ -1,6 +1,5 @@
 package com.miracle.common.util;
 
-import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Arrays;
@@ -23,8 +22,6 @@ public class DigestUtil extends DigestUtils {
     public static boolean weChatPubCheckSignature(String signature, String token, int timestamp, int nonce) {
         String[] array = new String[] {token, String.valueOf(timestamp), String.valueOf(nonce)};
         Arrays.sort(array);
-        System.out.println("排序后");
-        System.out.println(JSONArray.toJSON(array));
         return signature.equals(DigestUtils.sha1Hex(array[0] + array[1] + array[2]));
     }
 }

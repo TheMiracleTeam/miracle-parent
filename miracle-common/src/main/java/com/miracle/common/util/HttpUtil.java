@@ -1,12 +1,5 @@
 package com.miracle.common.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -32,6 +25,11 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -135,12 +133,11 @@ public class HttpUtil {
     /**
      * 发送Post请求
      * @param httpPost Post方式请求对象
-     * @return
+     * @return 返回内容
      */
-    private String sendHttpPost(HttpPost httpPost) {
+        private String sendHttpPost(HttpPost httpPost) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
-        HttpEntity entity = null;
         String responseContent = null;
         try {
             // 创建默认的httpClient实例.
@@ -149,22 +146,12 @@ public class HttpUtil {
             // 执行请求
             response = httpClient.execute(httpPost);
             //获取结果实体
-            entity = response.getEntity();
+            HttpEntity entity = response.getEntity();
             responseContent = EntityUtils.toString(entity, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                // 关闭连接,释放资源
-                if (response != null) {
-                    response.close();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtil.closeAll(response, httpClient);
         }
         return responseContent;
     }
@@ -190,12 +177,11 @@ public class HttpUtil {
     /**
      * 发送Get请求
      * @param httpGet Get方式请求对象
-     * @return
+     * @return String 请求返回内容
      */
     private String sendHttpGet(HttpGet httpGet) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
-        HttpEntity entity = null;
         String responseContent = null;
         try {
             // 创建默认的httpClient实例.
@@ -204,22 +190,12 @@ public class HttpUtil {
             // 执行请求
             response = httpClient.execute(httpGet);
             //获取结果实体
-            entity = response.getEntity();
+            HttpEntity entity = response.getEntity();
             responseContent = EntityUtils.toString(entity, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                // 关闭连接,释放资源
-                if (response != null) {
-                    response.close();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtil.closeAll(response, httpClient);
         }
         return responseContent;
     }
@@ -227,7 +203,7 @@ public class HttpUtil {
     /**
      * 发送Get请求Https
      * @param httpGet Get方式请求对象
-     * @return
+     * @return String 请求返回内容
      */
     private String sendHttpsGet(HttpGet httpGet) {
         CloseableHttpClient httpClient = null;
@@ -249,17 +225,7 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                // 关闭连接,释放资源
-                if (response != null) {
-                    response.close();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtil.closeAll(response, httpClient);
         }
         return responseContent;
     }
