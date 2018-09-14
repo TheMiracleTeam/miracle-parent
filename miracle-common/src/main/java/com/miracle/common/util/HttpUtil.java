@@ -7,6 +7,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.util.PublicSuffixMatcher;
 import org.apache.http.conn.util.PublicSuffixMatcherLoader;
@@ -34,8 +35,8 @@ import java.util.Objects;
 
 /**
  * Http工具类
- * Created at 2018-09-10 22:48:42
- * @author Allen
+ * Created at 2018-09-14 09:15:35
+ * @author AprLieZ
  */
 public class HttpUtil {
 
@@ -43,28 +44,16 @@ public class HttpUtil {
     private static int connectTimeout = 5000;	//建立连接的超时时间
     private static int connectionRequestTimeout = 5000;	//从连接池中后去连接的超时时间
 
-    private RequestConfig requestConfig = RequestConfig.custom()
+    private static RequestConfig requestConfig = RequestConfig.custom()
             .setSocketTimeout(socketTimeout)
             .setConnectTimeout(connectTimeout)
             .setConnectionRequestTimeout(connectionRequestTimeout).build();
-    private static HttpUtil instance = null;
-
-    private HttpUtil() {
-    }
-
-    /** 获取HttpClientUtil单例 */
-    public static HttpUtil getInstance() {
-        if (instance == null) {
-            instance = new HttpUtil();
-        }
-        return instance;
-    }
 
     /**
      * 发送 post请求
      * @param httpUrl 地址
      */
-    public String sendHttpPost(String httpUrl) {
+    public static String sendHttpPost(String httpUrl) {
         HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
         return sendHttpPost(httpPost);
     }
@@ -74,7 +63,7 @@ public class HttpUtil {
      * @param httpUrl 地址
      * @param params 参数(格式:key1=value1&key2=value2)
      */
-    public String sendHttpPost(String httpUrl, String params) {
+    public static String sendHttpPost(String httpUrl, String params) {
         HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
         try {
             // 设置参数
@@ -94,7 +83,7 @@ public class HttpUtil {
      * @param httpUrl 地址
      * @param maps 参数
      */
-    public String sendHttpPost(String httpUrl, Map<String, String> maps) {
+    public static String sendHttpPost(String httpUrl, Map<String, String> maps) {
         HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
         // 创建参数队列
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -115,7 +104,7 @@ public class HttpUtil {
      * @param maps 参数
      * @param fileLists 附件
      */
-    public String sendHttpPost(String httpUrl, Map<String, String> maps, List<File> fileLists) {
+    public static String sendHttpPost(String httpUrl, Map<String, String> maps, List<File> fileLists) {
         HttpPost httpPost = new HttpPost(httpUrl);// 创建httpPost
         MultipartEntityBuilder meBuilder = MultipartEntityBuilder.create();
         for (String key : maps.keySet()) {
@@ -135,32 +124,15 @@ public class HttpUtil {
      * @param httpPost Post方式请求对象
      * @return 返回内容
      */
-        private String sendHttpPost(HttpPost httpPost) {
-        CloseableHttpClient httpClient = null;
-        CloseableHttpResponse response = null;
-        String responseContent = null;
-        try {
-            // 创建默认的httpClient实例.
-            httpClient = HttpClients.createDefault();
-            httpPost.setConfig(requestConfig);
-            // 执行请求
-            response = httpClient.execute(httpPost);
-            //获取结果实体
-            HttpEntity entity = response.getEntity();
-            responseContent = EntityUtils.toString(entity, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtil.closeAll(response, httpClient);
-        }
-        return responseContent;
+    private static String sendHttpPost(HttpPost httpPost) {
+        return httpExecute(httpPost);
     }
 
     /**
      * 发送 get请求
      * @param httpUrl 地址
      */
-    public String sendHttpGet(String httpUrl) {
+    public static String sendHttpGet(String httpUrl) {
         HttpGet httpGet = new HttpGet(httpUrl);// 创建get请求
         return sendHttpGet(httpGet);
     }
@@ -169,7 +141,7 @@ public class HttpUtil {
      * 发送 get请求Https
      * @param httpUrl 地址
      */
-    public String sendHttpsGet(String httpUrl) {
+    public static String sendHttpsGet(String httpUrl) {
         HttpGet httpGet = new HttpGet(httpUrl);// 创建get请求
         return sendHttpsGet(httpGet);
     }
@@ -179,25 +151,8 @@ public class HttpUtil {
      * @param httpGet Get方式请求对象
      * @return String 请求返回内容
      */
-    private String sendHttpGet(HttpGet httpGet) {
-        CloseableHttpClient httpClient = null;
-        CloseableHttpResponse response = null;
-        String responseContent = null;
-        try {
-            // 创建默认的httpClient实例.
-            httpClient = HttpClients.createDefault();
-            httpGet.setConfig(requestConfig);
-            // 执行请求
-            response = httpClient.execute(httpGet);
-            //获取结果实体
-            HttpEntity entity = response.getEntity();
-            responseContent = EntityUtils.toString(entity, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtil.closeAll(response, httpClient);
-        }
-        return responseContent;
+    private static String sendHttpGet(HttpGet httpGet) {
+        return httpExecute(httpGet);
     }
 
     /**
@@ -205,7 +160,7 @@ public class HttpUtil {
      * @param httpGet Get方式请求对象
      * @return String 请求返回内容
      */
-    private String sendHttpsGet(HttpGet httpGet) {
+    private static String sendHttpsGet(HttpGet httpGet) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         HttpEntity entity = null;
@@ -221,6 +176,32 @@ public class HttpUtil {
             response = httpClient.execute(httpGet);
             //获取结果实体
             entity = response.getEntity();
+            responseContent = EntityUtils.toString(entity, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtil.closeAll(response, httpClient);
+        }
+        return responseContent;
+    }
+
+    /**
+     * 执行http请求
+     * @param httpReuqestBase   请求对象：HttpPost/HttpGet
+     * @return
+     */
+    private static String httpExecute(HttpRequestBase httpReuqestBase) {
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse response = null;
+        String responseContent = null;
+        try {
+            // 创建默认的httpClient实例.
+            httpClient = HttpClients.createDefault();
+            httpReuqestBase.setConfig(requestConfig);
+            // 执行请求
+            response = httpClient.execute(httpReuqestBase);
+            //获取结果实体
+            HttpEntity entity = response.getEntity();
             responseContent = EntityUtils.toString(entity, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
