@@ -225,6 +225,6 @@ public class HttpUtil {
      * @return HttpServletResponse Response对象
      */
     public static HttpServletResponse getResponse() {
-        return ((ServletWebRequest) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 }

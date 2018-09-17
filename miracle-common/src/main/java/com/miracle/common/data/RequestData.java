@@ -22,6 +22,7 @@ public class RequestData extends HashMap<Object, Object> implements Map<Object, 
 
     private static final long serialVersionUID = 1L;
 
+    // Servlet请求对象
     private HttpServletRequest request;
 
     /**
