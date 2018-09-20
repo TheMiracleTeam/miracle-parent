@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 /**
  * 请求拦截器配置
- * @Created at 2018-08-29 22:28:38
+ * Created at 2018-08-29 22:28:38
  * @author Allen
  */
 @Configuration
