@@ -44,11 +44,10 @@ public class ConfigService {
         for (CnfConfig cnfConfig : list) {
             ZkClient zkClient = ZookeeperUtil.getZkClient(zkHost, zkTimeout);
             path = ConfigKey.CNF_ROOT + cnfConfig.getConfKey();
-            if (zkClient.exists(path)) {
-                zkClient.writeData(path, cnfConfig.getConfValue());
-            } else {
-                zkClient.createPersistent(path, cnfConfig.getConfValue());
+            if (!zkClient.exists(path)) {
+                zkClient.createPersistent(path, true);
             }
+            zkClient.writeData(path, cnfConfig.getConfValue());
         }
     }
 }
