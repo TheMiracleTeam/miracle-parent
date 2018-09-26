@@ -24,6 +24,8 @@ public class ClassUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassUtil.class);
 
+    private ClassUtil() {}
+
     /**
      * 获取当前类加载器
      * @return ClassLoad 类加载器

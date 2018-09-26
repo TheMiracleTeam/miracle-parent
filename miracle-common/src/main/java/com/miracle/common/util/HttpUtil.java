@@ -49,6 +49,8 @@ public class HttpUtil {
             .setConnectTimeout(connectTimeout)
             .setConnectionRequestTimeout(connectionRequestTimeout).build();
 
+    private HttpUtil() {}
+
     /**
      * 发送 post请求
      * @param httpUrl 地址

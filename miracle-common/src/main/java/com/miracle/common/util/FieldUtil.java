@@ -15,6 +15,8 @@ public class FieldUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldUtil.class);
 
+    private FieldUtil() {}
+
     /**
      * 根据JSON对象初始化对象属性
      * @param object 对象

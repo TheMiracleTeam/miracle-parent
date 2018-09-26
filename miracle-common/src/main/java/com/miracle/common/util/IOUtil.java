@@ -10,6 +10,8 @@ import java.io.IOException;
  */
 public class IOUtil {
 
+    private IOUtil() {}
+
     /**
      * 同时关闭多个流
      * @param ios IO流，可变参数

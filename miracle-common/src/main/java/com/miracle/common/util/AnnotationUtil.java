@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class AnnotationUtil extends AnnotationUtils {
 
+    private AnnotationUtil() {}
+
     /**
      * 根据注解类获取自定义注解实体集
      * @param annotationClass 注解类
