@@ -1,31 +1,38 @@
-package com.miracle.zookeeper.config;
+package com.miracle.zookeeper.configuration;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkMarshallingError;
 import org.I0Itec.zkclient.serialize.ZkSerializer;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.nio.charset.StandardCharsets;
 
 /**
- * Zookeeper配置类
+ * Zookeeper自动配置类
  * Created at 2018-09-26 14:55:00
  * @author Allen
  */
 @Configuration
-public class ZookeeperConfig {
+@EnableConfigurationProperties(ZookeeperConfiguration.class)
+public class ZookeeperAutoConfiguration {
 
-    @Value("${zookeeper.host}")
-    private String host;
+    @Autowired
+    private ZookeeperConfiguration configuration;
 
-    @Value("${zookeeper.timeout:3000}")
-    private int timeout;
-
+    /**
+     * ZkClient Bean注册
+     * @return ZkClient
+     */
     @Bean
     public ZkClient zkClient() {
-        ZkClient zkClient = new ZkClient(host, timeout);
+        if (configuration.getHost() == null || "".equals(configuration.getHost())) {
+            System.out.println("未配置Zookeeper服务器。(zookeeper.host)");
+            return null;
+        }
+        ZkClient zkClient = new ZkClient(configuration.getHost(), configuration.getWatchTimeout());
         zkClient.setZkSerializer(new MyZkSerializer());
         return zkClient;
     }

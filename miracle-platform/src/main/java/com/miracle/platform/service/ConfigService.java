@@ -7,7 +7,6 @@ import com.miracle.repository.model.CnfConfig;
 import com.miracle.repository.service.ICnfConfigService;
 import com.miracle.zookeeper.service.ZookeeperService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,14 +16,6 @@ import java.util.Map;
 
 @Service
 public class ConfigService {
-
-    // Zookeeper服务器地址
-    @Value("${zookeeper.host}")
-    private String zkHost;
-
-    // Zookeeper超时时间
-    @Value("${zookeeper.timeout}")
-    private int zkTimeout;
 
     @Autowired
     private ZookeeperService zkService;
