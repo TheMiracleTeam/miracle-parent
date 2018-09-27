@@ -23,7 +23,7 @@ public class DigestUtil extends DigestUtils {
 
     private static final String TRANSFORMATION = "DES/CBC/PKCS5Padding";    //转换
 
-    private final static String CHARSET = Charset.defaultCharset().name();  //当前环境编码
+    private static final String CHARSET = Charset.defaultCharset().name();  //当前环境编码
 
     private static byte[] iv = {(byte)0x6D, (byte)0x69, (byte)0x72,
             (byte)0x61, (byte)0x63, (byte)0x6C, (byte)0x65, (byte)0x73};    //自定义算法参数 miracles
