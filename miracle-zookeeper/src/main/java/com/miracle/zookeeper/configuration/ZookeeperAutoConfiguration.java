@@ -1,14 +1,11 @@
 package com.miracle.zookeeper.configuration;
 
+import com.miracle.common.serializer.ZkSerializer;
 import org.I0Itec.zkclient.ZkClient;
-import org.I0Itec.zkclient.exception.ZkMarshallingError;
-import org.I0Itec.zkclient.serialize.ZkSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * Zookeeper自动配置类
@@ -33,35 +30,7 @@ public class ZookeeperAutoConfiguration {
             return null;
         }
         ZkClient zkClient = new ZkClient(configuration.getHost(), configuration.getWatchTimeout());
-        zkClient.setZkSerializer(new MyZkSerializer());
+        zkClient.setZkSerializer(new ZkSerializer());
         return zkClient;
-    }
-
-    /**
-     * 自定义Zookeeper序列化器
-     */
-    class MyZkSerializer implements ZkSerializer {
-
-        /**
-         * 序列化
-         * @param obj 数据
-         * @return byte[] 字节数组
-         * @throws ZkMarshallingError Zookeeper序列化异常
-         */
-        @Override
-        public byte[] serialize(Object obj) throws ZkMarshallingError {
-            return String.valueOf(obj).getBytes(StandardCharsets.UTF_8);
-        }
-
-        /**
-         * 反序列化
-         * @param bytes 字节数组
-         * @return Object 原数据
-         * @throws ZkMarshallingError Zookeeper序列化异常
-         */
-        @Override
-        public Object deserialize(byte[] bytes) throws ZkMarshallingError {
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
     }
 }
