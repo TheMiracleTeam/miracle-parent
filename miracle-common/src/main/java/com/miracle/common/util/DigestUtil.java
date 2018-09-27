@@ -19,6 +19,8 @@ import java.util.Arrays;
  */
 public class DigestUtil extends DigestUtils {
 
+    private DigestUtil() {}
+
     private static final String TRANSFORMATION = "DES/CBC/PKCS5Padding";    //转换
 
     private final static String CHARSET = Charset.defaultCharset().name();  //当前环境编码
