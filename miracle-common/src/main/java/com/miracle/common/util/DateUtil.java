@@ -28,6 +28,8 @@ public class DateUtil {
     // 时间格式
     public static final String TIME_PATTERN = "HH:mm:ss";
 
+    private DateUtil() {}
+
     /**
      * 获取当前时间戳，13位
      * @return long 13位时间戳

@@ -20,6 +20,8 @@ public class XMLUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(XMLUtil.class);
 
+    private XMLUtil() {}
+
     /**
      * 解析XML文本
      * @param xmlContent XML文本字符串

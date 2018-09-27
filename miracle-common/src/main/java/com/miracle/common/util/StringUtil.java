@@ -23,6 +23,8 @@ public class StringUtil extends StringUtils {
     // 默认返回类型
     private static final int DATA_TYPE_DEFAULT = DATA_TYPE_INTEGER;
 
+    private StringUtil() {}
+
     /**
      * 将字符串切割成列表
      * @param value 字符串

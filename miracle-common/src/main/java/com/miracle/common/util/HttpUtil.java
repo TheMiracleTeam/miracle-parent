@@ -22,7 +22,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +47,8 @@ public class HttpUtil {
             .setSocketTimeout(socketTimeout)
             .setConnectTimeout(connectTimeout)
             .setConnectionRequestTimeout(connectionRequestTimeout).build();
+
+    private HttpUtil() {}
 
     /**
      * 发送 post请求
@@ -225,6 +226,6 @@ public class HttpUtil {
      * @return HttpServletResponse Response对象
      */
     public static HttpServletResponse getResponse() {
-        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
     }
 }

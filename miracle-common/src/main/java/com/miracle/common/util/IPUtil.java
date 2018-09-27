@@ -19,6 +19,8 @@ public class IPUtil {
     // 默认IP地址
     private static final String DEFAULT_IP_ADDRESS = "0.0.0.0";
 
+    private IPUtil() {}
+
     /**
      * 获取客户端IP地址
      * @return String IP地址

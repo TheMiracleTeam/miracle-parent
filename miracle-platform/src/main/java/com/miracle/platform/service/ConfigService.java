@@ -1,15 +1,12 @@
 package com.miracle.platform.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.miracle.common.util.ZookeeperUtil;
 import com.miracle.platform.common.ConfigKey;
 import com.miracle.platform.common.Constant;
 import com.miracle.repository.model.CnfConfig;
 import com.miracle.repository.service.ICnfConfigService;
-import org.I0Itec.zkclient.ZkClient;
-import org.springframework.beans.factory.annotation.Value;
+import com.miracle.zookeeper.service.ZookeeperService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,13 +17,8 @@ import java.util.Map;
 @Service
 public class ConfigService {
 
-    // Zookeeper服务器地址
-    @Value("${zookeeper.host}")
-    private String zkHost;
-
-    // Zookeeper超时时间
-    @Value("${zookeeper.timeout}")
-    private int zkTimeout;
+    @Autowired
+    private ZookeeperService zkService;
 
     @Reference
     private ICnfConfigService cnfConfigService;
@@ -42,12 +34,8 @@ public class ConfigService {
         List<CnfConfig> list = cnfConfigService.listAll(params);
         String path;
         for (CnfConfig cnfConfig : list) {
-            ZkClient zkClient = ZookeeperUtil.getZkClient(zkHost, zkTimeout);
             path = ConfigKey.CNF_ROOT + cnfConfig.getConfKey();
-            if (!zkClient.exists(path)) {
-                zkClient.createPersistent(path, true);
-            }
-            zkClient.writeData(path, cnfConfig.getConfValue());
+            zkService.updateData(path, cnfConfig.getConfValue());
         }
     }
 }
