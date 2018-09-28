@@ -43,7 +43,7 @@ public class ClassUtil {
     public static List<Class<?>> getClassesInPackage(String packageName, boolean isGetChildren) {
         List<Class<?>> classes = new ArrayList<>();
         try {
-            Enumeration<URL> urls = getCurrentClassLoader().getResources(packageName.replace(".", File.separator));
+            Enumeration<URL> urls = getCurrentClassLoader().getResources(packageName.replace(".", "/"));
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if (url != null) {
@@ -132,7 +132,7 @@ public class ClassUtil {
                         packageName = entryName.substring(0, index).replace("/", ".");
                     }
                     if (entryName.endsWith(".class")) {
-                        String className = entryName.substring(packageName.length() + 1, entryName.length() - 6);
+                        String className = entryName.substring(packageName.length() + 1, entryName.length() - ".class".length());
                         try {
                             classes.add(Class.forName(packageName + "." + className));
                         } catch (ClassNotFoundException e) {

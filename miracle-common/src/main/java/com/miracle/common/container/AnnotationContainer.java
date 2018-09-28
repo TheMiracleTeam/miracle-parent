@@ -1,6 +1,5 @@
 package com.miracle.common.container;
 
-import com.alibaba.fastjson.JSONObject;
 import com.miracle.common.data.AnnotationData;
 import com.miracle.common.util.AnnotationUtil;
 import com.miracle.common.util.ClassUtil;
@@ -31,11 +30,7 @@ public class AnnotationContainer implements BeanPostProcessor {
 
     static {
         try {
-            System.out.println("do this");
-            List<Class<?>> ee = ClassUtil.getClassesInPackage("com.miracle.common.annotation", true);
-            System.out.println(JSONObject.toJSONString(ee));
             classes.addAll(ClassUtil.getClassesInPackage(ANNOTATION_PACKAGE_NAME, true));
-            System.out.println(JSONObject.toJSONString(classes));
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
@@ -76,10 +71,7 @@ public class AnnotationContainer implements BeanPostProcessor {
      * @return List<AnnotationData> 自定义注解集
      */
     public static <T extends Annotation> List<AnnotationData> getAnnotationByClazz(Class<T> annotationClass) {
-        System.out.println("in this getABC");
         String key = annotationClass.getName();
-        System.out.println(JSONObject.toJSONString(containers));
-        System.out.println(JSONObject.toJSONString(classes));
         return containers.containsKey(key) ? containers.get(key) : new ArrayList<>();
     }
 
