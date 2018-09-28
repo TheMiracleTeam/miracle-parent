@@ -1,7 +1,15 @@
 package com.miracle.common.util;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.Arrays;
 
 /**
@@ -12,6 +20,13 @@ import java.util.Arrays;
 public class DigestUtil extends DigestUtils {
 
     private DigestUtil() {}
+
+    private static final String TRANSFORMATION = "DES/CBC/PKCS5Padding";    //转换
+
+    private static final String CHARSET = Charset.defaultCharset().name();  //当前环境编码
+
+    private static byte[] iv = {(byte)0x6D, (byte)0x69, (byte)0x72,
+            (byte)0x61, (byte)0x63, (byte)0x6C, (byte)0x65, (byte)0x73};    //自定义算法参数 miracles
 
     /**
      * 微信公众号接入校验
@@ -57,5 +72,111 @@ public class DigestUtil extends DigestUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 自定义加密
+     * @param str 原文
+     * @param key 密码
+     * @return String 密文
+     */
+    public static String encrypt(String str, String key){
+        StringBuffer sb = new StringBuffer(str);
+        sb.reverse(); //调头
+        sb.insert(str.length()/2, key);
+        return encryptByDes(sb.toString(), key, CHARSET);
+    }
+
+    /**
+     * 自定义解密
+     * @param str 密文
+     * @param key 密码
+     * @return String 原文
+     */
+    public static String decrypt(String str, String key){
+        String text = decryptByDes(str, key, CHARSET);
+        int start = (text.length() - key.length())/2;
+        int end = start + key.length();
+        return new StringBuffer(text).replace(start, end, "").reverse().toString();
+    }
+
+    /**
+     * des加密
+     * @param str 原文
+     * @param key 密码
+     * @param charset 编码
+     * @return String Base64编码转换后的密文
+     */
+    public static String encryptByDes(String str, String key, String charset){
+        try {
+            SecureRandom random = new SecureRandom();   //随机源
+            // 从原始密匙数据创建DESKeySpec对象
+            DESKeySpec dks = new DESKeySpec(formatKey(key).getBytes());
+
+            // 创建一个密匙工厂，然后用它把DESKeySpec转换成
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+
+            // 一个SecretKey对象
+            SecretKey secretKey = keyFactory.generateSecret(dks);
+
+            Cipher ecipher = Cipher.getInstance(TRANSFORMATION);
+
+            IvParameterSpec ivo = new IvParameterSpec(iv);
+
+            // 用密匙初始化Cipher对象
+            ecipher.init(Cipher.ENCRYPT_MODE, secretKey, ivo, random);
+            return Base64.encodeBase64String(ecipher.doFinal(str.getBytes(charset)));
+        } catch (Exception e) {
+            throw new SecurityException(e.getMessage());
+        }
+    }
+
+    /**
+     * des解密
+     * @param str 密文
+     * @param key 密码
+     * @param charset 编码
+     * @return String 原文
+     */
+    public static String decryptByDes(String str, String key, String charset){
+        try {
+            SecureRandom random = new SecureRandom();   //随机源
+            // 从原始密匙数据创建DESKeySpec对象
+            DESKeySpec dks = new DESKeySpec(formatKey(key).getBytes());
+
+            // 创建一个密匙工厂，然后用它把DESKeySpec转换成
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+
+            // 一个SecretKey对象
+            SecretKey secretKey = keyFactory.generateSecret(dks);
+
+            Cipher dcipher = Cipher.getInstance(TRANSFORMATION);
+
+            IvParameterSpec ivo = new IvParameterSpec(iv);
+
+            // 用密匙初始化Cipher对象
+            dcipher.init(Cipher.DECRYPT_MODE, secretKey, ivo, random);
+            return new String(dcipher.doFinal(Base64.decodeBase64(str)), charset);
+        } catch (Exception e) {
+            throw new SecurityException(e.getMessage());
+        }
+    }
+
+    /**
+     * 格式化key
+     * @param key 原字符串
+     * @return String 算法计算后的8位字符串
+     */
+    public static String formatKey(String key) {
+        int len = key.length();
+        for (int i=len;i<8;i++) {//小于8位，按下标填充"mnopqrst"字符
+            key = new StringBuffer(key).append((char) (i+109)).toString();
+        }
+        if (len > 8) {//大于8位，保留首尾字节，截取中间
+            int start = (len-6)/2;
+            int end = start + 6;
+            key = key.substring(0,1) + key.substring(start,end) + key.substring(key.length()-1,key.length());
+        }
+        return key;
     }
 }
