@@ -1,6 +1,9 @@
 package com.miracle.platform.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONObject;
+import com.miracle.common.data.DataGridData;
+import com.miracle.common.data.RequestData;
 import com.miracle.common.util.ZookeeperUtil;
 import com.miracle.platform.config.PageSetupCnf;
 import com.miracle.platform.service.ConfigService;
@@ -8,7 +11,6 @@ import com.miracle.repository.model.HelloWorld;
 import com.miracle.repository.service.IHelloWorldService;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,8 +25,6 @@ import java.util.Map;
 @RequestMapping("config")
 public class ConfigController {
 
-    private static String HOST;
-
     @Reference
     private IHelloWorldService helloWorldService;
 
@@ -37,6 +37,10 @@ public class ConfigController {
         Map<String, Object> ret = new HashMap<>();
         ret.put("data", PageSetupCnf.getJson());
         ret.put("set", PageSetupCnf.getNavigationList());
+        Map<Object, Object> map = JSONObject.parseObject("{\"ip\":\"192.168.1.103\",\"page\":\"1\",\"sort\":\"confKey\",\"rows\":\"10\",\"order\":\"asc\"}", HashMap.class);
+        RequestData requestData = new RequestData(map);
+        DataGridData data = configService.dataGridData(requestData);
+        System.out.println(JSONObject.toJSONString(data));
         return ret;
     }
 
@@ -56,8 +60,4 @@ public class ConfigController {
         return ret;
     }
 
-    @Value("${zookeeper.host}")
-    public void setHost(String host) {
-        HOST = host;
-    }
 }

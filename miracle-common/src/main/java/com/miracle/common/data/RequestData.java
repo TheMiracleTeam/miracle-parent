@@ -65,6 +65,18 @@ public class RequestData extends HashMap<Object, Object> implements Map<Object, 
         this.put("ip", IPUtil.getIpAddress(request));
     }
 
+    /**
+     * 获取请求参数Map
+     * @return Map<Object, Object> 请求参数Map
+     */
+    public Map<Object, Object> getMap() {
+        Map<Object, Object> retMap = new HashMap<>();
+        for (Entry entry : super.entrySet()) {
+            retMap.put(entry.getKey(), entry.getValue());
+        }
+        return retMap;
+    }
+
     public HttpServletRequest getRequest() {
         return request;
     }

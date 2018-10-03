@@ -1,6 +1,8 @@
 package com.miracle.platform.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.miracle.common.data.DataGridData;
+import com.miracle.common.data.RequestData;
 import com.miracle.platform.common.ConfigKey;
 import com.miracle.platform.common.Constant;
 import com.miracle.repository.model.CnfConfig;
@@ -37,5 +39,10 @@ public class ConfigService {
             path = ConfigKey.CNF_ROOT + cnfConfig.getConfKey();
             zkService.updateData(path, cnfConfig.getConfValue());
         }
+    }
+
+    public DataGridData dataGridData(RequestData requestData) {
+        System.out.println("do platform dataGridData");
+        return cnfConfigService.listDataGrid(requestData.getMap());
     }
 }

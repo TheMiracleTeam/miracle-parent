@@ -28,6 +28,12 @@ public class QueryData extends HashMap<Object, Object> implements Map<Object, Ob
     private static final String KEY_LIMIT = "limit";
     private static final String KEY_LIMIT_SQL_ID = "limit_sql";
 
+    public QueryData() {}
+
+    public QueryData(Map<Object, Object> data) {
+        super(data);
+    }
+
     /**
      * 设置查询字段
      * @param sql 字段内容，例如："id, FROM_UNIXTIME(created_at) as time"

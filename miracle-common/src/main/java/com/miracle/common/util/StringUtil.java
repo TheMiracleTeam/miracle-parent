@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 字符串工具类
@@ -109,5 +111,34 @@ public class StringUtil extends StringUtils {
      */
     public static Boolean[] splitToBoolean(String value, String regex) {
         return (Boolean[]) splitToList(value, regex, DATA_TYPE_BOOLEAN).toArray(new Boolean[0]);
+    }
+
+    /**
+     * 将驼峰格式字符串转换成下划线格式字符串
+     * @param camelCase 驼峰格式字符串
+     * @return String 下划线格式字符串
+     */
+    public static String camelCaseToUnderscore(String camelCase) {
+        if (camelCase == null || "".equals(camelCase)) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder(camelCase);
+        Pattern pattern = Pattern.compile("[A-Z]([a-z\\d]+)?");
+        Matcher matcher = pattern.matcher(result);
+        String text;
+        int index;
+        while (matcher.find()) {
+            text = matcher.group();
+            System.out.println(text);
+            index = result.indexOf(text);
+            result.replace(index, index + text.length(), "_" + text.toLowerCase());
+        }
+        if (camelCase.charAt(0) != '_' && result.charAt(0) == '_') {
+            result.deleteCharAt(0);
+        }
+        if (camelCase.charAt(camelCase.length() - 1) != '_' && result.charAt(result.length() - 1) == '_') {
+            result.deleteCharAt(result.length() - 1);
+        }
+        return result.toString();
     }
 }

@@ -1,5 +1,9 @@
 package com.miracle.mybatis.service;
 
+import com.miracle.common.base.BaseModel;
+import com.miracle.common.data.DataGridData;
+import com.miracle.common.data.QueryData;
+import com.miracle.common.data.RequestData;
 import com.miracle.common.util.StringUtil;
 import com.miracle.mybatis.dao.DaoSupport;
 import org.apache.ibatis.mapping.BoundSql;
@@ -11,7 +15,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,6 @@ public abstract class AbstractService<T> extends DaoSupport {
 
     @SuppressWarnings("unchecked")
     public AbstractService() {
-        System.out.println("in this");
         String namespace = "";
         try {
             Object genericClz = getClass().getGenericSuperclass();
@@ -51,23 +53,17 @@ public abstract class AbstractService<T> extends DaoSupport {
             if (genericClz instanceof ParameterizedType) {
                 Class<T> entityClass = (Class<T>) ((ParameterizedType) genericClz).getActualTypeArguments()[0];
                 namespace = entityClass.getPackage().getName();
-                System.out.println("命名空间为：");
-                System.out.println(namespace);
                 String[] packagePath = StringUtil.split(namespace, '.');
-                System.out.println(Arrays.toString(packagePath));
                 if (packagePath.length > 0) {
                     packagePath[packagePath.length - 1] = "mapper." + entityClass.getSimpleName() + "Mapper.";
                 }
                 namespace = StringUtil.join(packagePath, '.');
             }
         } catch (RuntimeException e) {
-            System.out.println("GG");
             LOGGER.error("初始化失败，没有发现泛型！", SELF);
         }
         NAMESPACE = namespace;
-        System.out.println(NAMESPACE);
         this.setNameSpace(namespace);
-        System.out.println("over");
     }
 
     /**
@@ -309,5 +305,83 @@ public abstract class AbstractService<T> extends DaoSupport {
         Configuration configuration = this.getSqlSessionFactory().getConfiguration();
         BoundSql boundSql = configuration.getMappedStatement(NAMESPACE + sqlId).getBoundSql(params);
         return boundSql.getSql();
+    }
+
+    /**
+     * 获取DataGrid数据格式数据
+     * @return DataGridData {rows: 数据列表, total: 总数据量, pageNum: 当前页数, pageSize: 页数据量}
+     */
+    public DataGridData listDataGrid() {
+        return listDataGrid(new RequestData(), null);
+    }
+
+    /**
+     * 获取DataGrid数据格式数据（用于Dubbo架构中，由于消费者无法序列化RequestData对象）
+     * @param requestMap 请求参数Map
+     * @return DataGridData {rows: 数据列表, total: 总数据量, pageNum: 当前页数, pageSize: 页数据量}
+     */
+    public DataGridData listDataGrid(Map<Object, Object> requestMap) {
+        return listDataGrid(new RequestData(requestMap), null);
+    }
+
+    /**
+     * 获取DataGrid数据格式数据
+     * @param requestData 请求参数封装类
+     * @return DataGridData {rows: 数据列表, total: 总数据量, pageNum: 当前页数, pageSize: 页数据量}
+     */
+    public DataGridData listDataGrid(RequestData requestData) {
+        return listDataGrid(requestData, null);
+    }
+
+    /**
+     * 获取DataGrid数据格式数据
+     * @param queryData 查询参数封装类
+     * @return DataGridData {rows: 数据列表, total: 总数据量, pageNum: 当前页数, pageSize: 页数据量}
+     */
+    public DataGridData listDataGrid(QueryData queryData) {
+        return listDataGrid(new RequestData(), queryData);
+    }
+
+    /**
+     * 获取DataGrid数据格式数据
+     * @param requestData 请求参数封装类
+     * @param queryData 查询参数封装类
+     * @return DataGridData {rows: 数据列表, total: 总数据量, pageNum: 当前页数, pageSize: 页数据量}
+     */
+    public DataGridData listDataGrid(RequestData requestData, QueryData queryData) {
+        DataGridData data = new DataGridData();
+        if (queryData == null) {
+            queryData = new QueryData();
+        }
+        if (queryData.getLimit() == null || "".equals(queryData.getLimit())) {
+            if (requestData.containsKey("page")) {
+                data.setPageNum(requestData.getInteger("page"));
+            }
+            if (requestData.containsKey("rows")) {
+                data.setPageSize(requestData.getInteger("rows"));
+            }
+            if (data.getPageNum() != null && data.getPageSize() != null) {
+                queryData.setPage(data.getPageNum(), data.getPageSize());
+            }
+        }
+        if (queryData.getOrder() == null || "".equals(queryData.getOrder())) {
+            // 排序字段
+            String sort = null;
+            // 排序规则
+            String order = "";
+            if (requestData.containsKey("sort")) {
+                // 驼峰命名转下划线命名
+                sort = StringUtil.camelCaseToUnderscore(requestData.getString("sort"));
+            }
+            if (requestData.containsKey("order")) {
+                order = requestData.getString("order");
+            }
+            if (sort != null && !"".equals(sort)) {
+                queryData.setOrder(String.format("order by %s %s", sort, order));
+            }
+        }
+        data.setRows((List<? extends BaseModel>) selectAll(queryData));
+        data.setTotal(countAll(queryData));
+        return data;
     }
 }

@@ -2,6 +2,7 @@ package com.miracle.api.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
+import com.miracle.common.data.DataGridData;
 import com.miracle.common.data.QueryData;
 import com.miracle.common.util.StringUtil;
 import com.miracle.mybatis.service.AbstractService;
@@ -42,5 +43,11 @@ public class CnfConfigService extends AbstractService<CnfConfig> implements ICnf
         System.out.println(queryData.get("where_sql"));
         System.out.println(super.getSQLById("findAll", queryData));
         return super.selectAll(queryData);
+    }
+
+    @Override
+    public DataGridData listDataGrid(Map<Object, Object> requestMap) {
+        System.out.println("do api listDataGrid");
+        return super.listDataGrid(requestMap);
     }
 }

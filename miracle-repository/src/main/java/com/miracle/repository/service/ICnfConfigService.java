@@ -1,5 +1,6 @@
 package com.miracle.repository.service;
 
+import com.miracle.common.data.DataGridData;
 import com.miracle.repository.model.CnfConfig;
 
 import java.util.List;
@@ -18,4 +19,11 @@ public interface ICnfConfigService {
      * @return List<CnfConfig> 配置列表
      */
     List<CnfConfig> listAll(Map<Object, Object> paramMap);
+
+    /**
+     * 获取DataGrid数据
+     * @param requestMap 请求参数Map
+     * @return DataGridData DataGrid封装类
+     */
+    DataGridData listDataGrid(Map<Object, Object> requestMap);
 }
