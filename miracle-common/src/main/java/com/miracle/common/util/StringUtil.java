@@ -79,7 +79,6 @@ public class StringUtil extends StringUtils {
      */
     @SuppressWarnings("SuspiciousToArrayCall")
     public static Integer[] splitToInteger(String value, String regex) {
-        System.out.println("值为：" + value);
         return splitToList(value, regex, DATA_TYPE_INTEGER).toArray(new Integer[0]);
     }
 
@@ -129,7 +128,6 @@ public class StringUtil extends StringUtils {
         int index;
         while (matcher.find()) {
             text = matcher.group();
-            System.out.println(text);
             index = result.indexOf(text);
             result.replace(index, index + text.length(), "_" + text.toLowerCase());
         }

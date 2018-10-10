@@ -26,18 +26,21 @@ import java.util.Map;
 @Service
 public abstract class AbstractService<T> extends DaoSupport {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
+
     final static Class<? extends Object> SELF = AbstractService.class;
 
     // 默认的查询SqlId
-    final static String DEFAULT_SELECT_SQL_ID = "findAll";
+    private String DEFAULT_SELECT_SQL_ID = "findAll";
 
     // 默认的统计SqlId
-    final static String DEFAULT_COUNT_SQL_ID = "countAll";
+    private String DEFAULT_COUNT_SQL_ID = "countAll";
 
     // 默认的批量删除SqlId
-    final static String DEFAULT_DELETE_SQL_ID = "deleteAll";
+    private String DEFAULT_DELETE_SQL_ID = "deleteAll";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
+    // 是否使用驼峰
+    private boolean isCamelCase = false;
 
     @Autowired
     protected Mapper<T> mapper;
@@ -366,12 +369,12 @@ public abstract class AbstractService<T> extends DaoSupport {
         }
         if (queryData.getOrder() == null || "".equals(queryData.getOrder())) {
             // 排序字段
-            String sort = null;
+            String sort = requestData.getString("sort");
             // 排序规则
             String order = "";
-            if (requestData.containsKey("sort")) {
+            if (requestData.containsKey("sort") && !isCamelCase) {
                 // 驼峰命名转下划线命名
-                sort = StringUtil.camelCaseToUnderscore(requestData.getString("sort"));
+                sort = StringUtil.camelCaseToUnderscore(sort);
             }
             if (requestData.containsKey("order")) {
                 order = requestData.getString("order");
@@ -380,8 +383,40 @@ public abstract class AbstractService<T> extends DaoSupport {
                 queryData.setOrder(String.format("order by %s %s", sort, order));
             }
         }
-        data.setRows((List<? extends BaseModel>) selectAll(queryData));
+        data.setRows((List<? extends BaseModel>) super.selectForList(DEFAULT_SELECT_SQL_ID, queryData));
         data.setTotal(countAll(queryData));
         return data;
+    }
+
+    public String getDEFAULT_SELECT_SQL_ID() {
+        return DEFAULT_SELECT_SQL_ID;
+    }
+
+    public void setDEFAULT_SELECT_SQL_ID(String DEFAULT_SELECT_SQL_ID) {
+        this.DEFAULT_SELECT_SQL_ID = DEFAULT_SELECT_SQL_ID;
+    }
+
+    public String getDEFAULT_COUNT_SQL_ID() {
+        return DEFAULT_COUNT_SQL_ID;
+    }
+
+    public void setDEFAULT_COUNT_SQL_ID(String DEFAULT_COUNT_SQL_ID) {
+        this.DEFAULT_COUNT_SQL_ID = DEFAULT_COUNT_SQL_ID;
+    }
+
+    public String getDEFAULT_DELETE_SQL_ID() {
+        return DEFAULT_DELETE_SQL_ID;
+    }
+
+    public void setDEFAULT_DELETE_SQL_ID(String DEFAULT_DELETE_SQL_ID) {
+        this.DEFAULT_DELETE_SQL_ID = DEFAULT_DELETE_SQL_ID;
+    }
+
+    public boolean isCamelCase() {
+        return isCamelCase;
+    }
+
+    public void setCamelCase(boolean camelCase) {
+        isCamelCase = camelCase;
     }
 }
