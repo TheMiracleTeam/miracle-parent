@@ -129,7 +129,6 @@ public class StringUtil extends StringUtils {
         int index;
         while (matcher.find()) {
             text = matcher.group();
-            System.out.println(text);
             index = result.indexOf(text);
             result.replace(index, index + text.length(), "_" + text.toLowerCase());
         }
