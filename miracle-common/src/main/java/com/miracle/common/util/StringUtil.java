@@ -79,7 +79,6 @@ public class StringUtil extends StringUtils {
      */
     @SuppressWarnings("SuspiciousToArrayCall")
     public static Integer[] splitToInteger(String value, String regex) {
-        System.out.println("值为：" + value);
         return splitToList(value, regex, DATA_TYPE_INTEGER).toArray(new Integer[0]);
     }
 
